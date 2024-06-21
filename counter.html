@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>WebSocket Counter Test Client</title>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const ws = new WebSocket('ws://localhost:9001/');
+        const statusDisplay = document.getElementById('status');
+
+        ws.onopen = function () {
+          console.log('Connected to WebSocket');
+        };
+
+        ws.onmessage = function (event) {
+          console.log('Received: ' + event.data);
+          statusDisplay.textContent = 'Counter Value: ' + event.data;
+        };
+
+        ws.onerror = function (event) {
+          console.error('WebSocket error: ' + event.message);
+          statusDisplay.textContent = 'WebSocket Error: ' + event.message;
+        };
+
+        ws.onclose = function () {
+          console.log('WebSocket connection closed');
+          statusDisplay.textContent = 'WebSocket Closed';
+        };
+
+        document
+          .getElementById('increment')
+          .addEventListener('click', function () {
+            ws.send(JSON.stringify({ action: 'increment' }));
+          });
+
+        document
+          .getElementById('decrement')
+          .addEventListener('click', function () {
+            ws.send(JSON.stringify({ action: 'decrement' }));
+          });
+      });
+    </script>
+  </head>
+  <body>
+    <h1>WebSocket Counter</h1>
+    <div id="status">Connecting...</div>
+    <button id="increment">Increment</button>
+    <button id="decrement">Decrement</button>
+  </body>
+</html>
