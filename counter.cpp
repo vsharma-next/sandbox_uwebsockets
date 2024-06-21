@@ -44,7 +44,6 @@ public:
                 // simdjson::dom::element msg = parser.parse(simdjson::padded_string(message.data(), message.size()));
                 
                 simdjson::dom::element msg = parser.parse(message);
-
                 std::string_view action = msg["action"].get_string().value();
 
                 if (action == "increment") {
